@@ -1,0 +1,60 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.main {
+  margin-left: 240px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  padding: 28px;
+}
+
+/* ── Empty state ── */
+.emptyWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 14px;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 52px;
+  line-height: 1;
+  opacity: 0.4;
+}
+
+.emptyTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.emptyDesc {
+  font-size: 14px;
+  color: #64748b;
+  max-width: 360px;
+  line-height: 1.6;
+}
+
+.tag {
+  display: inline-block;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-top: 4px;
+}
