@@ -153,18 +153,19 @@ IT | Facility
 
 ### Tables & Relationships
 
-```
-categories        id, name, type(category_type)
-vendors           id, name, contact_person, email, phone
-assets            id, category_id→categories, vendor_id→vendors,
+```text
+categories        id, name, type(category_type), description, created_at, is_active
+vendors           id, name, contact_person, email, phone, address, gst_no, is_active
+it_assets         id, category_id→categories, vendor_id→vendors,
                   model_name, serial_number(unique), purchase_date, warranty_expiry,
                   status(asset_status), condition(asset_condition), specifications(jsonb)
 facility_items    id, category_id→categories, item_name, total_quantity,
                   available_quantity, low_stock_threshold, unit
-employees         id, emp_id(unique), full_name, email(unique), department, is_active
-asset_allocations id, asset_id→assets, employee_id→employees, allocation_date,
-                  expected_return_date, actual_return_date, digital_ack_status, remarks
-```
+employees         id, emp_id(unique), full_name, email(unique), department, designation, 
+                  join_date, role, is_active
+asset_allocations id, asset_id→it_assets, employee_id→employees, allocation_date,
+                  actual_return_date, digital_ack_status, remarks
+                  ```
 
 **Key relationship rule:** When an allocation is created, `assets.status` must flip to `Allocated`. On return (`actual_return_date` set), it flips back to `Available`. This logic lives in `allocation_controller.py`, not the view or DB.
 
