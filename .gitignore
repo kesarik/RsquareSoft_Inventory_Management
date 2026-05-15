@@ -1,0 +1,77 @@
+# ──────────────────────────────────────────
+# Python / FastAPI (backend)
+# ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+venv/
+.venv/
+env/
+.env/
+
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Alembic auto-generated but not migrations themselves
+*.pyc
+
+# ──────────────────────────────────────────
+# Environment & secrets
+# ──────────────────────────────────────────
+.env
+backend/.env
+*.env.local
+
+# ──────────────────────────────────────────
+# Node / React / Vite (frontend)
+# ──────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+
+dist/
+frontend/dist/
+frontend/.vite/
+
+*.local
+
+# ──────────────────────────────────────────
+# Logs
+# ──────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ──────────────────────────────────────────
+# OS & editor artifacts
+# ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ──────────────────────────────────────────
+# Testing & coverage
+# ──────────────────────────────────────────
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+
+# ──────────────────────────────────────────
+# Misc
+# ──────────────────────────────────────────
+*.bak
+*.tmp
