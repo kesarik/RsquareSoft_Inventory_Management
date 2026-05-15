@@ -35,36 +35,48 @@ smart-asset-mgmt/
 │   │   │
 │   │   ├── models/                  # M — SQLAlchemy ORM models (DB table definitions)
 │   │   │   ├── __init__.py
-│   │   │   ├── asset.py             # IT_assets table
-│   │   │   ├── facility.py          # facility_items table
+│   │   │   ├── role.py              # roles table
+│   │   │   ├── user.py              # users table
 │   │   │   ├── employee.py          # employees table
+│   │   │   ├── employee_request.py  # employee_requests table
+│   │   │   ├── asset.py             # it_assets table
+│   │   │   ├── facility.py          # facility_items table
 │   │   │   ├── allocation.py        # asset_allocations table
 │   │   │   ├── category.py          # categories table
 │   │   │   └── vendor.py            # vendors table
 │   │   │
 │   │   ├── controllers/             # C — Business logic; called by views, calls models
 │   │   │   ├── __init__.py
+│   │   │   ├── role_controller.py
+│   │   │   ├── user_controller.py
+│   │   │   ├── employee_controller.py
+│   │   │   ├── employee_request_controller.py
 │   │   │   ├── asset_controller.py
 │   │   │   ├── facility_controller.py
-│   │   │   ├── employee_controller.py
 │   │   │   ├── allocation_controller.py
 │   │   │   ├── category_controller.py
 │   │   │   └── vendor_controller.py
 │   │   │
 │   │   ├── views/                   # V — FastAPI routers (HTTP layer only, no logic)
 │   │   │   ├── __init__.py
+│   │   │   ├── role_view.py
+│   │   │   ├── user_view.py
+│   │   │   ├── employee_view.py
+│   │   │   ├── employee_request_view.py
 │   │   │   ├── asset_view.py
 │   │   │   ├── facility_view.py
-│   │   │   ├── employee_view.py
 │   │   │   ├── allocation_view.py
 │   │   │   ├── category_view.py
 │   │   │   └── vendor_view.py
 │   │   │
 │   │   └── schemas/                 # Pydantic request/response schemas (shared by V + C)
 │   │       ├── __init__.py
+│   │       ├── role.py
+│   │       ├── user.py
+│   │       ├── employee.py
+│   │       ├── employee_request.py
 │   │       ├── asset.py
 │   │       ├── facility.py
-│   │       ├── employee.py
 │   │       ├── allocation.py
 │   │       ├── category.py
 │   │       └── vendor.py
@@ -79,22 +91,31 @@ smart-asset-mgmt/
 ├── frontend/
 │   ├── src/
 │   │   ├── models/                  # M — JS data shapes / TypeScript types (API response types)
+│   │   │   ├── role.js
+│   │   │   ├── user.js
+│   │   │   ├── employee.js
+│   │   │   ├── employeeRequest.js
 │   │   │   ├── asset.js
 │   │   │   ├── facility.js
-│   │   │   ├── employee.js
 │   │   │   └── allocation.js
 │   │   │
 │   │   ├── controllers/             # C — React Query hooks + API call functions (data logic)
 │   │   │   ├── api/                 # Axios client + raw API functions
 │   │   │   │   ├── client.js        # Axios base instance (baseURL, headers, interceptors)
+│   │   │   │   ├── roleApi.js
+│   │   │   │   ├── userApi.js
+│   │   │   │   ├── employeeApi.js
+│   │   │   │   ├── employeeRequestApi.js
 │   │   │   │   ├── assetApi.js
 │   │   │   │   ├── facilityApi.js
-│   │   │   │   ├── employeeApi.js
 │   │   │   │   └── allocationApi.js
 │   │   │   └── hooks/               # React Query hooks (useAssets, useCreateAsset, etc.)
+│   │   │       ├── useRoles.js
+│   │   │       ├── useUsers.js
+│   │   │       ├── useEmployees.js
+│   │   │       ├── useEmployeeRequests.js
 │   │   │       ├── useAssets.js
 │   │   │       ├── useFacility.js
-│   │   │       ├── useEmployees.js
 │   │   │       └── useAllocations.js
 │   │   │
 │   │   ├── views/                   # V — React pages and reusable UI components
@@ -141,33 +162,62 @@ smart-asset-mgmt/
 ### Enums
 
 ```python
+# category_type
+IT | Facility
+
 # asset_status
 Available | Allocated | Under Maintenance | Damaged | Scrap | Replaced
 
 # asset_condition
 New | Good | Fair | Poor
 
-# category_type
-IT | Facility
+# request_type
+allocation_request | raise_issue | return_asset
+
+# request_status
+pending | approved | rejected | resolved
 ```
 
 ### Tables & Relationships
 
 ```text
+-- Independent tables (no FK deps)
+roles             id, role_name(unique)
+                  seeded: super_admin | it_admin | facility_admin | employee
+
 categories        id, name, type(category_type), description, created_at, is_active
+
 vendors           id, name, contact_person, email, phone, address, gst_no, is_active
+
+employees         id, emp_id(unique), full_name, email(unique), department, designation,
+                  join_date, role_id→roles ON DELETE SET NULL, is_active
+
+users             id, employee_id→employees(unique) ON DELETE CASCADE,
+                  username(unique), password, is_active, created_at, last_login
+
+-- Inventory tables
 it_assets         id, category_id→categories, vendor_id→vendors,
                   model_name, serial_number(unique), purchase_date, warranty_expiry,
-                  status(asset_status), condition(asset_condition), specifications(jsonb)
+                  status(asset_status) DEFAULT 'Available',
+                  condition(asset_condition) DEFAULT 'New', specifications(jsonb)
+
 facility_items    id, category_id→categories, item_name, total_quantity,
                   available_quantity, low_stock_threshold, unit
-employees         id, emp_id(unique), full_name, email(unique), department, designation, 
-                  join_date, role, is_active
+
+-- Transaction tables
 asset_allocations id, asset_id→it_assets, employee_id→employees, allocation_date,
                   actual_return_date, digital_ack_status, remarks
-                  ```
 
-**Key relationship rule:** When an allocation is created, `assets.status` must flip to `Allocated`. On return (`actual_return_date` set), it flips back to `Available`. This logic lives in `allocation_controller.py`, not the view or DB.
+employee_requests  id, employee_id→employees, category_id→categories,
+                  item_name, description, reason, project_name,
+                  request_type(request_type), status(request_status) DEFAULT 'pending',
+                  created_at, updated_at
+```
+
+**Key relationship rules:**
+- When an allocation is created, `it_assets.status` must flip to `Allocated`. On return (`actual_return_date` set), it flips back to `Available`. This logic lives in `allocation_controller.py`.
+- `employee_requests.category_id` identifies the category of item requested. `item_name` is a free-text description within that category. For `raise_issue` / `return_asset` types, `item_name` holds the specific asset reference.
+- One employee has at most one `users` row (`employee_id` is UNIQUE).
 
 ---
 
@@ -175,17 +225,29 @@ asset_allocations id, asset_id→it_assets, employee_id→employees, allocation_
 
 | Method | Path | Description |
 |--------|------|-------------|
+| GET | `/roles` | List all roles |
+| POST | `/roles` | Create role |
+| GET | `/roles/{id}` | Role detail |
+| DELETE | `/roles/{id}` | Delete role |
+| GET | `/users` | List users |
+| POST | `/users` | Create user account |
+| GET | `/users/{id}` | User detail |
+| PATCH | `/users/{id}/status` | Activate / deactivate user |
+| GET | `/employees` | List employees |
+| POST | `/employees` | Create employee |
+| GET | `/employees/{id}` | Employee detail + current allocations |
+| GET | `/requests` | List requests — supports `?employee_id=`, `?request_type=`, `?status=` |
+| POST | `/requests` | Employee submits a new request |
+| GET | `/requests/{id}` | Request detail |
+| PATCH | `/requests/{id}/status` | IT/Facility admin updates request status |
 | GET | `/assets` | List assets — supports `?status=`, `?category_id=` filters |
-| POST | `/assets` | Create asset — auto-generate `asset_tag` |
+| POST | `/assets` | Create asset |
 | GET | `/assets/{id}` | Asset detail |
 | PUT | `/assets/{id}` | Update asset |
 | DELETE | `/assets/{id}` | Delete asset |
 | GET | `/facility` | List facility items |
 | POST | `/facility` | Create facility item |
 | PUT | `/facility/{id}` | Update stock or item details |
-| GET | `/employees` | List employees |
-| POST | `/employees` | Create employee |
-| GET | `/employees/{id}` | Employee detail + current allocations |
 | GET | `/allocations` | List all allocations |
 | POST | `/allocations` | Allocate asset to employee |
 | PUT | `/allocations/{id}/return` | Record asset return |
@@ -322,12 +384,9 @@ These features are planned post-demo. Do not scaffold, stub, or reference them u
 - Issue & ticket management
 - Maintenance scheduling and repair history
 - Dashboard analytics and charts
-- Role-based access control (RBAC) and user auth
 - Email notifications (AWS SES)
 - Audit logging
 - Multi-branch / multi-office support
 - Export to Excel / PDF reports
 - AI-based maintenance prediction
-- Multi-branch / multi-office support
 - AWS Lambda / API Gateway deployment
-- Email notifications (AWS SES)

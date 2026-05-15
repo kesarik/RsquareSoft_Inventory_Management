@@ -79,6 +79,17 @@ CREATE TABLE employees (
 );
 
 
+CREATE TABLE users (
+    id            SERIAL PRIMARY KEY,
+    employee_id   INTEGER UNIQUE NOT NULL,
+    username      VARCHAR(100) UNIQUE NOT NULL,
+    password      VARCHAR(255) NOT NULL,
+    is_active     BOOLEAN DEFAULT TRUE,
+    created_at    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_login    TIMESTAMP WITH TIME ZONE
+);
+
+
 -- ==========================================
 -- 3. Create Dependent Tables (Inventory)
 -- ==========================================
