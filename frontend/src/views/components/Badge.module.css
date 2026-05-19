@@ -1,0 +1,43 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.1px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Status colours */
+.green  { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.green .dot  { background: #16a34a; }
+
+.blue   { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+.blue .dot   { background: #2563eb; }
+
+.indigo { background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; }
+.indigo .dot { background: #4338ca; }
+
+.yellow { background: #fefce8; color: #ca8a04; border: 1px solid #fef08a; }
+.yellow .dot { background: #ca8a04; }
+
+.red    { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.red .dot    { background: #dc2626; }
+
+.gray   { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+.gray .dot   { background: #94a3b8; }
+
+.purple { background: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff; }
+.purple .dot { background: #7c3aed; }
+
+.orange { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.orange .dot { background: #c2410c; }

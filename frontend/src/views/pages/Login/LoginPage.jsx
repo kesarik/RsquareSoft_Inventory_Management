@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './LoginPage.module.css'
+import logo from "./assets/COMPANY_LOGO.png";
 
 const STATIC_USERS = [
-  { username: 'admin', password: 'admin123', role: 'Admin', name: 'Admin User' },
-  { username: 'manager', password: 'manager123', role: 'Manager', name: 'Store Manager' },
+  { username: 'superadmin', password: 'super123',  role: 'SuperAdmin', name: 'Super Admin' },
+  { username: 'admin',      password: 'admin123',  role: 'Admin',      name: 'Kesari Kadam' },
+  { username: 'employee',   password: 'emp123',    role: 'Employee',   name: 'Rahul Sharma' },
 ]
 
 const EyeIcon = ({ open }) =>
@@ -74,7 +76,7 @@ export default function LoginPage() {
       {/* ── Left branding panel ── */}
       <div className={styles.leftPanel}>
         <div className={styles.brandWrap}>
-          <div className={styles.brandIcon}>📦</div>
+          <div className={styles.brandIcon}><img src={logo} alt="Logo" /></div>
           <div className={styles.brandName}>RsquareSoft</div>
           <div className={styles.brandSub}>Inventory Management System</div>
 
@@ -164,10 +166,12 @@ export default function LoginPage() {
             <div className={styles.demoCredentials}>
               <div className={styles.demoTitle}>Test accounts</div>
               <div className={styles.demoGrid}>
+                <span className={styles.demoKey}>SuperAdmin</span>
+                <span>superadmin / super123</span>
                 <span className={styles.demoKey}>Admin</span>
                 <span>admin / admin123</span>
-                <span className={styles.demoKey}>Manager</span>
-                <span>manager / manager123</span>
+                <span className={styles.demoKey}>Employee</span>
+                <span>employee / emp123</span>
               </div>
             </div>
           </form>

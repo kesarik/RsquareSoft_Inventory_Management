@@ -1,0 +1,87 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.main {
+  margin-left: 240px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 28px 32px;
+}
+
+/* ── Access Denied ── */
+.accessDenied {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 65vh;
+  gap: 14px;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.adIconWrap {
+  width: 72px;
+  height: 72px;
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+  margin-bottom: 4px;
+}
+
+.adTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.adDesc {
+  font-size: 14px;
+  color: #64748b;
+  max-width: 400px;
+  line-height: 1.7;
+}
+
+.adRolePill {
+  display: inline-block;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.adBtn {
+  margin-top: 6px;
+  padding: 10px 24px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.adBtn:hover {
+  background: #1d4ed8;
+}
