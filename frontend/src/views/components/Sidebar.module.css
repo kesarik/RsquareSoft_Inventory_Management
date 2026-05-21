@@ -21,15 +21,11 @@
   border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
-.brandIcon {
-  font-size: 22px;
+.brandLogo {
   width: 38px;
   height: 38px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: contain;
+  border-radius: 8px;
   flex-shrink: 0;
 }
 

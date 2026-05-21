@@ -6,6 +6,7 @@ import AssetDetail from './AssetDetail'
 import AssetForm from './AssetForm'
 import { useAssets, useDeleteAsset } from '../../../controllers/hooks/useAssets'
 import { ASSET_STATUSES, ASSET_CONDITIONS } from '../../../models/asset'
+import AllocationForm from '../Allocations/AllocationForm'
 import styles from './AssetList.module.css'
 
 /* ── Stat card definitions ── */
@@ -93,9 +94,10 @@ export default function AssetList() {
   const [activeStatKey, setActiveStatKey] = useState(null)
 
   /* modal state */
-  const [viewAsset, setViewAsset]     = useState(null)
-  const [editAsset, setEditAsset]     = useState(null)  // null=closed, {}=create, asset=edit
+  const [viewAsset, setViewAsset]       = useState(null)
+  const [editAsset, setEditAsset]       = useState(null)  // null=closed, {}=create, asset=edit
   const [deleteTarget, setDeleteTarget] = useState(null)
+  const [allocateTarget, setAllocateTarget] = useState(null)
 
   const { data: assets = [], isPending } = useAssets()
   const deleteMutation = useDeleteAsset()
@@ -153,10 +155,11 @@ export default function AssetList() {
   const hasActiveFilters = search || status || category || activeStatKey
 
   /* modal handlers */
-  const openView = (asset) => { setViewAsset(asset); setEditAsset(null) }
-  const openEdit = (asset) => { setEditAsset(asset); setViewAsset(null) }
-  const openCreate = () => { setEditAsset({}); setViewAsset(null) }
-  const closeModals = () => { setViewAsset(null); setEditAsset(null) }
+  const openView     = (asset) => { setViewAsset(asset); setEditAsset(null); setAllocateTarget(null) }
+  const openEdit     = (asset) => { setEditAsset(asset); setViewAsset(null); setAllocateTarget(null) }
+  const openCreate   = ()      => { setEditAsset({}); setViewAsset(null); setAllocateTarget(null) }
+  const openAllocate = (asset) => { setAllocateTarget(asset); setViewAsset(null); setEditAsset(null) }
+  const closeModals  = ()      => { setViewAsset(null); setEditAsset(null); setAllocateTarget(null) }
 
   const handleDeleteConfirm = async () => {
     if (!deleteTarget) return
@@ -340,6 +343,36 @@ export default function AssetList() {
                       </td>
                       <td>
                         <div className={styles.actions}>
+                          {asset.status === 'Available' ? (
+                            <button
+                              className={`${styles.iconBtn} ${styles.allocate}`}
+                              title="Allocate to employee"
+                              onClick={() => openAllocate(asset)}
+                            >
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <polyline points="17 1 21 5 17 9" />
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                                <polyline points="7 23 3 19 7 15" />
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                              </svg>
+                            </button>
+                          ) : asset.status === 'Allocated' ? (
+                            <span className={styles.allocatedTick} title="Currently allocated">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                            </span>
+                          ) : asset.status === 'Under Maintenance' ? (
+                            <span className={styles.statusEmoji} title="Under maintenance">🔧</span>
+                          ) : asset.status === 'Damaged' ? (
+                            <span className={styles.statusEmoji} title="Damaged">⚠️</span>
+                          ) : asset.status === 'Scrap' ? (
+                            <span className={styles.statusEmoji} title="Scrapped">🗑️</span>
+                          ) : asset.status === 'Replaced' ? (
+                            <span className={styles.statusEmoji} title="Replaced">🔄</span>
+                          ) : (
+                            <span className={styles.iconBtnGhost} />
+                          )}
                           <button
                             className={styles.iconBtn}
                             title="View details"
@@ -405,6 +438,13 @@ export default function AssetList() {
           onConfirm={handleDeleteConfirm}
           onCancel={() => setDeleteTarget(null)}
           isLoading={deleteMutation.isPending}
+        />
+      )}
+
+      {allocateTarget && (
+        <AllocationForm
+          asset={allocateTarget}
+          onClose={() => setAllocateTarget(null)}
         />
       )}
     </AppLayout>

@@ -1,3 +1,4 @@
+from .role import Role
 from .category import Category
 from .vendor import Vendor
 from .employee import Employee

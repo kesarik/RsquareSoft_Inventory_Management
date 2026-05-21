@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../controllers/hooks/useAuth'
 import styles from './Sidebar.module.css'
+import companyLogo from '../pages/Login/assets/COMPANY_LOGO.png'
 
 /* ── Icons ── */
 const Icon = ({ d, extra }) => (
@@ -108,7 +109,7 @@ export default function Sidebar() {
     <aside className={styles.sidebar}>
       {/* Brand */}
       <div className={styles.brand}>
-        <div className={styles.brandIcon}>📦</div>
+        <img src={companyLogo} alt="RsquareSoft" className={styles.brandLogo} />
         <div className={styles.brandText}>
           <span className={styles.brandName}>RsquareSoft</span>
           <span className={styles.brandSub}>Inventory</span>

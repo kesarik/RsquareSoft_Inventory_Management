@@ -1,6 +1,14 @@
 import styles from './ConfirmDialog.module.css'
 
-export default function ConfirmDialog({ title, message, onConfirm, onCancel, isLoading }) {
+export default function ConfirmDialog({
+  title,
+  message,
+  onConfirm,
+  onCancel,
+  isLoading,
+  confirmLabel = 'Delete',
+  loadingLabel = 'Deleting…',
+}) {
   return (
     <div className={styles.overlay} onClick={onCancel}>
       <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
@@ -18,7 +26,7 @@ export default function ConfirmDialog({ title, message, onConfirm, onCancel, isL
             Cancel
           </button>
           <button className={styles.confirmBtn} onClick={onConfirm} disabled={isLoading}>
-            {isLoading ? 'Deleting…' : 'Delete'}
+            {isLoading ? loadingLabel : confirmLabel}
           </button>
         </div>
       </div>
