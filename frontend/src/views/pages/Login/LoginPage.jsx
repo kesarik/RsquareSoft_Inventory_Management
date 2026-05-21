@@ -76,7 +76,9 @@ export default function LoginPage() {
       {/* ── Left branding panel ── */}
       <div className={styles.leftPanel}>
         <div className={styles.brandWrap}>
-          <div className={styles.brandIcon}><img src={logo} alt="Logo" /></div>
+          <div className={styles.brandIcon}>
+              <img src={logo} alt="Logo" />
+          </div>
           <div className={styles.brandName}>RsquareSoft</div>
           <div className={styles.brandSub}>Inventory Management System</div>
 
